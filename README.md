@@ -61,7 +61,7 @@ This project automates the deployment of a WordPress site and its services on a 
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/abdelhamidbouazi/cloud-1.git
-   cd automated-inception
+   cd cloud-1
    ```
 
 2. **Setup Environment**:
