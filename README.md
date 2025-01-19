@@ -60,7 +60,7 @@ This project automates the deployment of a WordPress site and its services on a 
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/automated-inception.git
+   git clone https://github.com/abdelhamidbouazi/cloud-1.git
    cd automated-inception
    ```
 
@@ -73,9 +73,9 @@ This project automates the deployment of a WordPress site and its services on a 
    ansible-playbook deployment.yml
    ```
 
-4. **Access the Site**:
-   - Visit `https://your-domain.com` to access WordPress.
-   - Use `https://your-domain.com/phpmyadmin` for database management.
+4. **Access the Site (not available yet)**:
+   - Visit `https://domain.com` to access WordPress.
+   - Use `https://domain.com/phpmyadmin` for database management.
 
 ---
 
