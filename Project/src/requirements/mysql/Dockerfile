@@ -1,7 +1,7 @@
-FROM debian:buster
+FROM debian:bullseye
 
-RUN apt-get -y update
+RUN apt-get update &&  apt-get install -y mysql-server && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y mysql-server
+EXPOSE 3306
 
-CMD ["mysqld", "--user=root", "--console"]
+CMD ["mysqld"]

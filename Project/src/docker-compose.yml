@@ -1,32 +1,33 @@
 version: '3.9'
 
 services:
-  nginx:
-      build:
-        context: ./src/nginx
-      ports:
-        - "8080:80"
-      volumes:
-        - .:/app
-      depends_on:
-        - wordpress
-      networks:
-        - cloud_1_network
-  cloud_db:
+  # nginx:
+  #     build:
+  #       context: ./src/nginx
+  #     ports:
+  #       - "8080:80"
+  #     volumes:
+  #       - .:/app
+  #     depends_on:
+  #       - wordpress
+  #     networks:
+  #       - cloud_1_network
+  mysql:
     context: ./src/mysql
+    container_name: db_container
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mydb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
-      - db_cloud:/var/lib/mysql
+      - db_volume:/var/lib/mysql
     networks:
-      - cloud-1-network
+      - mysql_network
 volumes:
-  db_cloud:
+  db_volume:
 networks:
-  cloud_1_network:
+  mysql_network:
     driver: bridge

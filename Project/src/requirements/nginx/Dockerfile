@@ -6,6 +6,6 @@ RUN apt-get install -y nginx && apt-get install openssl -y && openssl req -x509 
 
 # COPY ./tools/index.html /usr/share/nginx/html/
 
-COPY ./conf/default /etc/nginx/sites-available/default
+# COPY ./conf/default /etc/nginx/sites-available/default
 
 CMD ["nginx", "-g", "daemon off;"]
