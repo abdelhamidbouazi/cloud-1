@@ -5,10 +5,10 @@ RUN apt-get update && \
     apt-get install -y phpmyadmin && \
     apt-get clean
 
-COPY setup.sh /usr/local/bin/
+COPY setup.sh /
 
-RUN chmod +x /usr/local/bin/setup.sh
+RUN chmod +x /setup.sh
 
 EXPOSE 3306
 
-CMD [ "./usr/local/bin/setup.sh" ]
+CMD [ "/setup.sh" ]

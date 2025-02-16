@@ -1,42 +1,64 @@
 version: '3.9'
 
 services:
+  wordpress:
+    container_name: wordpress_container
+    image: wordpress:abouazi
+    env_file:
+      - .env
+    build:
+      context: ./services/wordpress
+    ports:
+      - "9000:9000"
+    volumes:
+      - wp_volume:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: always
+    networks:
+      - cloud_1_network
   nginx:
       build:
-        context: ./requirements/nginx
+        context: ./services/nginx
       ports:
-        - "3030:80"
+        - "443:443"
       volumes:
-        - .:/app
-      # depends_on:
-      #   - wordpress
+        - wp_volume:/var/www/html
+      depends_on:
+        - wordpress
       networks:
         - cloud_1_network
   mysql:
-    container_name: db_container
+    container_name: mysql
     # image: mysql:5.7
     build:
-      context: ./requirements/mysql
+      context: ./services/mysql
     ports:
       - "3306:3306"
+    # env_file:
+    #   - .env
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
-      - ./requirements/mysql/setup.sh:/setup.sh
       - db_volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
     restart: always
     networks:
-      - mysql_network
+      - cloud_1_network
 
   phpmyadmin:
       container_name: phpmyadmin_container
       image: phpmyadmin
       environment:
         # PMA_ARBITRARY: 1
-        PMA_HOST: db_container
+        PMA_HOST: mysql
         PMA_USER: ${MYSQL_USER}
         PMA_PASSWORD: ${MYSQL_PASSWORD}
       restart: always
@@ -45,30 +67,13 @@ services:
       ports:
         - "8080:80"
       networks:
-        - mysql_network
-  wordpress:
-    container_name: wordpress_container
-    build:
-      context: ./requirements/wordpress
-    ports:
-      - "9000:8000"
-    volumes:
-      - .:/app
-      - ./requirements/wordpress/setup.sh:/setup.sh
-    depends_on:
-      - mysql
-    networks:
-      - cloud_1_network
+        - cloud_1_network
 
 volumes:
   db_volume:
-    name: db_volume
+  wp_volume:
+
 networks:
   cloud_1_network:
-    name: cloud_1_network
-    driver: bridge
-    attachable: true
-  mysql_network:
-    name: mysql_network
     driver: bridge
     attachable: true
