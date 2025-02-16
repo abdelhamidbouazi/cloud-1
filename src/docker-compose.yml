@@ -46,6 +46,19 @@ services:
         - "8080:80"
       networks:
         - mysql_network
+  wordpress:
+    container_name: wordpress_container
+    build:
+      context: ./requirements/wordpress
+    ports:
+      - "9000:8000"
+    volumes:
+      - .:/app
+      - ./requirements/wordpress/setup.sh:/setup.sh
+    depends_on:
+      - mysql
+    networks:
+      - cloud_1_network
 
 volumes:
   db_volume:
