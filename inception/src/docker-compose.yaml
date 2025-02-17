@@ -1,0 +1,43 @@
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: ./requirements/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - .env
+    depends_on:
+      - wordpress
+    volumes:
+      - wp_volume:/var/www/html
+  wordpress:
+    container_name: wordpress
+    build:
+      context: ./requirements/wordpress
+    ports:
+      - "9000:9000"
+    env_file:
+      - .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - wp_volume:/var/www/html
+  mysql:
+    container_name: mysql
+    build:
+      context: ./requirements/mysql
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+volumes:
+  db_volume:
+  wp_volume:

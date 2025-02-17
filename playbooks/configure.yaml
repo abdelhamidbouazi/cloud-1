@@ -1,0 +1,15 @@
+- name: configure infrastructure
+  hosts: servers
+  become: true
+  tasks:
+    - name: create cloud-1 folder
+      file:
+        path: /home/ubuntu/cloud-1
+        state: directory
+
+    - name: copy inception folder
+      copy:
+        src: ../inception
+        dest: /home/ubuntu/cloud-1
+    # generate certificates using certbot
+    
