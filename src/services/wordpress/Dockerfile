@@ -1,11 +1,9 @@
 FROM ubuntu:latest
 
-RUN apt-get update -y
-RUN apt-get update -y && apt-get install -y software-properties-common \
-    && add-apt-repository ppa:ondrej/php -y \
-    && apt-get update -y \
-    && apt-get install -y php7.3-fpm php7.3-mysql
-RUN apt-get install curl -y
+RUN apt update -y
+RUN apt update -y && apt update -y \
+    && apt install -y php-fpm php-mysql
+RUN apt install curl -y
 
 COPY ./setup.sh /
 
