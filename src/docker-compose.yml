@@ -3,7 +3,6 @@ version: '3.9'
 services:
   wordpress:
     container_name: wordpress_container
-    image: wordpress:abouazi
     env_file:
       - .env
     build:
@@ -13,7 +12,8 @@ services:
     volumes:
       - wp_volume:/var/www/html
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     restart: always
     networks:
       - cloud_1_network
@@ -44,6 +44,10 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - db_volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
     restart: always
     networks:
       - cloud_1_network
