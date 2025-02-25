@@ -6,7 +6,7 @@ RUN apt-get update && \
 
 COPY setup.sh /
 
-RUN chmod +x /
+RUN chmod +x /setup.sh
 
 EXPOSE 3306
 

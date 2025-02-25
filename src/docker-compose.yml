@@ -65,6 +65,11 @@ services:
         - mysql
       ports:
         - "8080:80"
+      # volumes:
+      #   - ./services/phpmyadmin/apache2.conf:/etc/apache2/conf-available/servername.conf
+      # command: >
+      #   sh -c "ln -s /etc/apache2/conf-available/servername.conf /etc/apache2/conf-enabled/servername.conf &&
+      #         apache2-foreground"
       networks:
         - cloud_1_network
 
