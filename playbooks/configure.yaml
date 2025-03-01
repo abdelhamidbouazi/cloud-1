@@ -11,5 +11,6 @@
       copy:
         src: ../inception
         dest: /home/ubuntu/cloud-1
-    # generate certificates using certbot
-    
+    - name: change domain name
+      shell: |
+        sed -i 's/localhost/{{ ansible_host }}/g' /home/ubuntu/cloud-1/inception/src/.env
