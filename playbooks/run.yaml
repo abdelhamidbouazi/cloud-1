@@ -1,0 +1,8 @@
+- name: configure infrastructure
+  hosts: servers
+  become: true
+  tasks:
+    - name: run docker-compose
+      command: docker-compose up -d
+      args:
+        chdir: /home/ubuntu/cloud-1/inception/src/

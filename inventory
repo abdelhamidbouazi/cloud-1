@@ -1,0 +1,2 @@
+[servers]
+vm1 ansible_host=3.83.80.151  ansible_user=ubuntu ansible_ssh_private_key_file=./keys/cloud-1.pem

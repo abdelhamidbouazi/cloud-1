@@ -1,0 +1,83 @@
+version: '3.9'
+
+services:
+  wordpress:
+    container_name: wordpress_container
+    env_file:
+      - .env
+    build:
+      context: ./services/wordpress
+    ports:
+      - "9000:9000"
+    volumes:
+      - wp_volume:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: always
+    networks:
+      - cloud_1_network
+  nginx:
+      build:
+        context: ./services/nginx
+      ports:
+        - "443:443"
+      volumes:
+        - wp_volume:/var/www/html
+      depends_on:
+        - wordpress
+      networks:
+        - cloud_1_network
+  mysql:
+    container_name: mysql
+    # image: mysql:5.7
+    build:
+      context: ./services/mysql
+    ports:
+      - "3306:3306"
+    # env_file:
+    #   - .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - db_volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    restart: always
+    networks:
+      - cloud_1_network
+
+  phpmyadmin:
+      container_name: phpmyadmin_container
+      image: phpmyadmin
+      environment:
+        # PMA_ARBITRARY: 1
+        PMA_HOST: mysql
+        PMA_USER: ${MYSQL_USER}
+        PMA_PASSWORD: ${MYSQL_PASSWORD}
+      restart: always
+      depends_on:
+        - mysql
+      ports:
+        - "8080:80"
+      # volumes:
+      #   - ./services/phpmyadmin/apache2.conf:/etc/apache2/conf-available/servername.conf
+      # command: >
+      #   sh -c "ln -s /etc/apache2/conf-available/servername.conf /etc/apache2/conf-enabled/servername.conf &&
+      #         apache2-foreground"
+      networks:
+        - cloud_1_network
+
+volumes:
+  db_volume:
+  wp_volume:
+
+networks:
+  cloud_1_network:
+    driver: bridge
+    attachable: true
