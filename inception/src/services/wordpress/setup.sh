@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+sleep 20
 
 mkdir -p /run/php
 
@@ -24,7 +24,5 @@ wp core install --url="$DOMAIN_NAME" --title="$TITLE" --admin_user="$ADMIN" --ad
 wp user create "$WP_USR" "$WP_EMAIL" --role=author --user_pass="$WP_PWD" --allow-root
 sed -i 's/listen = \/run\/php\/php8.3-fpm.sock/listen = 9000/' /etc/php/8.3/fpm/pool.d/www.conf
 
-# Start PHP-FPM
+mkdir /run/php
 /usr/sbin/php-fpm8.3 -F
-
-

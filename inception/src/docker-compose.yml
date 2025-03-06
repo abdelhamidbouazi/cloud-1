@@ -12,8 +12,9 @@ services:
     volumes:
       - wp_volume:/var/www/html
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
+      # mysql:
+        # condition: service_healthy
     restart: always
     networks:
       - cloud_1_network
@@ -42,11 +43,11 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - db_volume:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 20s
-      retries: 10
-    restart: always
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+    #   timeout: 20s
+    #   retries: 10
+    restart: on-failure
     networks:
       - cloud_1_network
 
