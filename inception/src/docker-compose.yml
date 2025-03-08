@@ -42,7 +42,7 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
-      - db_volume:/var/lib/mysql
+    - ./services/mysql/db_volume:/var/lib/mysql
     # healthcheck:
     #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
     #   timeout: 20s
@@ -74,7 +74,20 @@ services:
 
 volumes:
   db_volume:
+    name: db_volume
+    driver: local
+    driver_opts:
+      device: /home/abouazi/data/wp
+      type: none
+      o: bind
+
   wp_volume:
+    name: wp_volume
+    driver: local
+    driver_opts:
+      device: /home/abouazi/data/db
+      type: none
+      o: bind
 
 networks:
   cloud_1_network:
