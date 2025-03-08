@@ -44,7 +44,7 @@ services:
     volumes:
     - ./services/mysql/db_volume:/var/lib/mysql
     # healthcheck:
-    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+    #   test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
     #   timeout: 20s
     #   retries: 10
     restart: on-failure
